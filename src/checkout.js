@@ -11,9 +11,8 @@ class Checkout {
   }
 
   total() {
-   return this.basket[0].price;
+    return this.basket.reduce((total, item) => total + item.price, 0);
   }
-
 }
 
 export default Checkout;
