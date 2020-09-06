@@ -32,5 +32,17 @@ describe('Checkout', () => {
       co.scan('003')
       expect(co.total()).to.equal(64.95);
     });
+
+    it('applies an overall discount when provided that promotional rule type', () => {
+      const co = new Checkout([{
+        type: 'overallDiscount',
+        threshold: 60,
+        percentageReduction: 10,
+      }]);
+      co.scan('001');
+      co.scan('002')
+      co.scan('003')
+      expect(co.total()).to.equal(66.78);
+    });
   });
 });
