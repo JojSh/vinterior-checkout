@@ -10,14 +10,21 @@ class Checkout {
     this.basket.push(products[barcode]);
   }
 
+  total() {
+    const subTotal = this.basket.reduce((acc, item) => acc + item.price, 0);
+    const total = this.rules.length ? this.applyPromotions(subTotal) : subTotal;
+    return this.limitTo2DP(total);
+  }
+
   applyPromotions(subTotal) {
-    return this.rules.reduce((acc, rule) => {
-      if (rule.type === 'overallDiscount') return this.applyOverallDiscount(acc, rule);
+    const sortedRules = this.sortRules(this.rules);
+    return sortedRules.reduce((acc, rule) => {
+      if (rule.type === 'percentageDiscount') return this.applyPercentageDiscount(acc, rule);
       if (rule.type === 'multipleItemDiscount') return this.applyMultipleItemDiscount(acc, rule);
     }, subTotal);
   }
 
-  applyOverallDiscount(subTotal, rule) {
+  applyPercentageDiscount(subTotal, rule) {
     const reductionFactor = 1 - (rule.percentageReduction / 100);
     return subTotal > rule.threshold ? subTotal * reductionFactor : acc;
   }
@@ -29,9 +36,16 @@ class Checkout {
     return subTotal - (itemReduction * discountableItemCount);
   }
 
-  total() {
-    const subTotal = this.basket.reduce((acc, item) => acc + item.price, 0);
-    return this.rules.length ? this.applyPromotions(subTotal) : subTotal;
+  sortRules(promotions) {
+    // overall percentage discount should always be calculated last
+    const percentageDiscountIndex = promotions.findIndex(item => item.type === 'percentageDiscount');
+    const splicedRule = promotions.splice(percentageDiscountIndex, 1)[0];
+    promotions.push(splicedRule);
+    return promotions;
+  }
+
+  limitTo2DP (number) {
+    return !Number.isInteger(number) ? Number(number.toFixed(2)) : number;
   }
 }
 

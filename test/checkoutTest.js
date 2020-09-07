@@ -35,7 +35,7 @@ describe('Checkout', () => {
 
     it('applies an overall discount when provided that promotional rule type', () => {
       const co = new Checkout([{
-        type: 'overallDiscount',
+        type: 'percentageDiscount',
         threshold: 60,
         percentageReduction: 10,
       }]);
@@ -55,6 +55,40 @@ describe('Checkout', () => {
       co.scan('003')
       co.scan('001');
       expect(co.total()).to.equal(36.95);
+    });
+
+    it('applies combined discounts', () => {
+      const co = new Checkout([{
+        type: 'multipleItemDiscount',
+        barcode: '001',
+        newPrice: 8.50,
+      }, {
+        type: 'percentageDiscount',
+        threshold: 60,
+        percentageReduction: 10,
+      }]);
+      co.scan('001');
+      co.scan('002')
+      co.scan('001');
+      co.scan('003');
+      expect(co.total()).to.equal(73.76);
+    });  
+  
+    it('applies combined discounts in any order', () => {
+      const co = new Checkout([{
+        type: 'percentageDiscount',
+        threshold: 60,
+        percentageReduction: 10,
+      }, {
+        type: 'multipleItemDiscount',
+        barcode: '001',
+        newPrice: 8.50,
+      }]);
+      co.scan('001');
+      co.scan('002')
+      co.scan('001');
+      co.scan('003');
+      expect(co.total()).to.equal(73.76);
     });
   });
 });
