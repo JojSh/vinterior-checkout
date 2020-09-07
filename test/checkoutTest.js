@@ -12,7 +12,7 @@ describe('Checkout', () => {
     
       expect(co.basket[0]).to.be.an('object');
       expect(co.basket[0]).to.deep.include({
-        id: '001',
+        barcode: '001',
         name: 'Very Cheap Chair',
         price: 9.25,
       });
@@ -43,6 +43,18 @@ describe('Checkout', () => {
       co.scan('002')
       co.scan('003')
       expect(co.total()).to.equal(66.78);
+    });
+
+    it('applies discount to multiple items of a given type when provided that promotional rule type', () => {
+      const co = new Checkout([{
+        type: 'multipleItemDiscount',
+        barcode: '001',
+        newPrice: 8.50,
+      }]);
+      co.scan('001');
+      co.scan('003')
+      co.scan('001');
+      expect(co.total()).to.equal(36.95);
     });
   });
 });
