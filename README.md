@@ -12,6 +12,18 @@ Written in Node using ES6 JavasScript with Mocha and Chai for testing.
 
 After cloning this repo to your local directory, change into it and make sure your version of Node version is V13x +
 
+```
+npm i
+```
+
+## Tests
+
+To run the Mocha unit tests:
+
+```
+npm test
+```
+
 ## Usage
 
 In index.js you will find some basic commands to run this application. To run from the command line use:
