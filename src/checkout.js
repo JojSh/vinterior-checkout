@@ -1,5 +1,5 @@
 import products from './products.js';
-import { applyPromotions } from './promoCalculator.js';
+import applyPromotions from './applyPromotions.js';
 
 class Checkout {
   constructor(promotional_rules) {

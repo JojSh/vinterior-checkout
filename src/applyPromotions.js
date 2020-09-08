@@ -1,11 +1,15 @@
 import products from './products.js';
+import { MULTIPLE_ITEM_DISCOUNT, PERCENTAGE_DISCOUNT } from './promotionTypes.js'
 
-export function applyPromotions(subTotal, promos, basket) {
+const promo_functions = {
+  [MULTIPLE_ITEM_DISCOUNT]: applyMultipleItemDiscount,
+  [PERCENTAGE_DISCOUNT]: applyPercentageDiscount,
+}
+
+function applyPromotions(subTotal, promos, basket) {
   // overall percentage promos should be calculated after any other promos
   const regularPromosSum = getRegularPromos(promos).reduce((acc, rule) => {
-    if (rule.type === 'multipleItemDiscount') {
-      return applyMultipleItemDiscount(acc, rule, basket);
-    }
+    return promo_functions[rule.type](acc, rule, basket)
   }, subTotal);
   const percentagePromo = getHighestEligiblePercentagePromo(promos, regularPromosSum);
   if (percentagePromo) return limitTo2DP(applyPercentageDiscount(regularPromosSum, percentagePromo));
@@ -13,13 +17,13 @@ export function applyPromotions(subTotal, promos, basket) {
 }
 
 function getRegularPromos(promotions) {
-  return promotions.filter(item => item.type !== 'percentageDiscount');
+  return promotions.filter(promo => promo.type !== PERCENTAGE_DISCOUNT);
 }
 
 function getHighestEligiblePercentagePromo(promotions, subTotal) {
   // the highest eligible overall percentage promo should override any others
   const eligiblePromos = promotions
-    .filter(item => item.type === 'percentageDiscount' && subTotal > item.threshold);
+    .filter(promo => promo.type === PERCENTAGE_DISCOUNT && subTotal > promo.threshold);
   return eligiblePromos.sort((a, b) => (a.threshold < b.threshold) ? 1: -1)[0];
 }
 
@@ -38,3 +42,5 @@ function applyMultipleItemDiscount(subTotal, rule, basket) {
 function limitTo2DP(number) {
   return !Number.isInteger(number) ? Number(number.toFixed(2)) : number;
 }
+
+export default applyPromotions;

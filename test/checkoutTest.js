@@ -10,6 +10,7 @@ describe('Checkout', () => {
       const co = new Checkout();
       co.scan('001');
       expect(co.showBasketContents()[0].barcode).to.equal('001');
+      expect(co.showBasketContents().length).to.equal(1);
     });
 
     it('should throw an error when a non-existant item is scanned', () => {
@@ -27,7 +28,7 @@ describe('Checkout', () => {
   });
 
   describe('#showBasketContents', () => {
-    it('should correctly display a list of scanned items', () => {
+    it('should correctly return a list of scanned items', () => {
       const co = new Checkout();
       co.scan('001');
       co.scan('002');
@@ -39,6 +40,11 @@ describe('Checkout', () => {
   });
 
   describe('#total', () => {
+    it('returns a total of zero when no items are scanned', () => {
+      const co = new Checkout();
+      expect(co.total()).to.equal('£0');
+    });
+
     it('returns the total when a single item is scanned in', () => {
       const co = new Checkout();
       co.scan('001');
