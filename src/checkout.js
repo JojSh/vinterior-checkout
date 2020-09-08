@@ -7,7 +7,11 @@ class Checkout {
   }
 
   scan(barcode) {
-    this.basket.push(products[barcode]);
+    if (products[barcode]) {
+      this.basket.push(products[barcode]);
+    } else {
+      throw new Error('Invalid product code');
+    }    
   }
 
   showBasketContents() {

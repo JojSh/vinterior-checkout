@@ -1,4 +1,4 @@
 import Checkout from './src/checkout.js';
 
-let co = new Checkout()
-co.scan('001')
+let co = new Checkout();
+co.scan('001');

@@ -11,6 +11,19 @@ describe('Checkout', () => {
       co.scan('001');
       expect(co.showBasketContents()[0].barcode).to.equal('001');
     });
+
+    it('should throw an error when a non-existant item is scanned', () => {
+      const co = new Checkout();
+      expect(() => co.scan('999')).to.throw(Error, 'Invalid product code');
+      expect(co.showBasketContents().length).to.equal(0);
+    });
+
+    it('should throw an error when invalid barcodes are scanned', () => {
+      const co = new Checkout();
+      expect(() => co.scan(1)).to.throw(Error, 'Invalid product code');
+      expect(() => co.scan('one')).to.throw(Error, 'Invalid product code');
+      expect(co.showBasketContents().length).to.equal(0);
+    });
   });
 
   describe('#showBasketContents', () => {
