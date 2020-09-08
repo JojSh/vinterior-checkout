@@ -9,7 +9,7 @@ const promo_functions = {
 function applyPromotions(subTotal, promos, basket) {
   // overall percentage promos should be calculated after any other promos
   const regularPromosSum = getRegularPromos(promos).reduce((acc, rule) => {
-    return promo_functions[rule.type](acc, rule, basket)
+    return promo_functions[rule.type](acc, rule, basket);
   }, subTotal);
   const percentagePromo = getHighestEligiblePercentagePromo(promos, regularPromosSum);
   if (percentagePromo) return limitTo2DP(applyPercentageDiscount(regularPromosSum, percentagePromo));

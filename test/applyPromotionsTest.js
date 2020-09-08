@@ -13,7 +13,7 @@ describe('applyPromotions', () => {
       threshold: 60,
       percentageReduction: 10,
     }];
-    const basket = [ products['001'], products['002'], products['003']]
+    const basket = [ products['001'], products['002'], products['003']];
     expect(applyPromotions(subTotal, promos, basket)).to.equal(66.78);
   });
 
@@ -24,7 +24,7 @@ describe('applyPromotions', () => {
       threshold: 80,
       percentageReduction: 10,
     }];
-    const basket = [ products['001'], products['002'], products['003']]
+    const basket = [ products['001'], products['002'], products['003']];
     expect(applyPromotions(subTotal, promos, basket)).to.equal(74.2);
   });
 
@@ -35,7 +35,7 @@ describe('applyPromotions', () => {
       barcode: '001',
       newPrice: 8.50,
     }];
-    const basket = [ products['001'], products['002'], products['001']]
+    const basket = [ products['001'], products['002'], products['001']];
     expect(applyPromotions(subTotal, promos, basket)).to.equal(36.95);
   });
 
