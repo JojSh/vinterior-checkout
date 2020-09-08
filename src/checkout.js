@@ -10,6 +10,10 @@ class Checkout {
     this.basket.push(products[barcode]);
   }
 
+  showBasketContents() {
+    return this.basket;
+  }
+
   total() {
     const subTotal = this.basket.reduce((acc, item) => acc + item.price, 0);
     const total = this.rules.length ? this.applyPromotions(subTotal) : subTotal;

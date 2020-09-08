@@ -6,16 +6,22 @@ const { expect } = chai;
 describe('Checkout', () => {
 
   describe('#scan', () => {
-    it('should correctly store a valid item when a valid barcode is scanned ', () => {
+    it('should correctly store a valid item when a valid barcode is scanned', () => {
       const co = new Checkout();
       co.scan('001');
-    
-      expect(co.basket[0]).to.be.an('object');
-      expect(co.basket[0]).to.deep.include({
-        barcode: '001',
-        name: 'Very Cheap Chair',
-        price: 9.25,
-      });
+      expect(co.showBasketContents()[0].barcode).to.equal('001');
+    });
+  });
+
+  describe('#showBasketContents', () => {
+    it('should correctly display a list of scanned items', () => {
+      const co = new Checkout();
+      co.scan('001');
+      co.scan('002');
+      expect(co.showBasketContents()).to.deep.equal([
+        { barcode: '001', name: 'Very Cheap Chair', price: 9.25 },
+        { barcode: '002', name: 'Little table', price: 45.00 }
+      ]);
     });
   });
 
@@ -28,8 +34,8 @@ describe('Checkout', () => {
 
     it('returns the total when a multiple items are scanned in', () => {
       const co = new Checkout();
-      co.scan('002')
-      co.scan('003')
+      co.scan('002');
+      co.scan('003');
       expect(co.total()).to.equal(64.95);
     });
 
@@ -40,8 +46,8 @@ describe('Checkout', () => {
         percentageReduction: 10,
       }]);
       co.scan('001');
-      co.scan('002')
-      co.scan('003')
+      co.scan('002');
+      co.scan('003');
       expect(co.total()).to.equal(66.78);
     });
 
@@ -52,7 +58,7 @@ describe('Checkout', () => {
         newPrice: 8.50,
       }]);
       co.scan('001');
-      co.scan('003')
+      co.scan('003');
       co.scan('001');
       expect(co.total()).to.equal(36.95);
     });
@@ -68,7 +74,7 @@ describe('Checkout', () => {
         percentageReduction: 10,
       }]);
       co.scan('001');
-      co.scan('002')
+      co.scan('002');
       co.scan('001');
       co.scan('003');
       expect(co.total()).to.equal(73.76);
@@ -85,7 +91,7 @@ describe('Checkout', () => {
         newPrice: 8.50,
       }]);
       co.scan('001');
-      co.scan('002')
+      co.scan('002');
       co.scan('001');
       co.scan('003');
       expect(co.total()).to.equal(73.76);
