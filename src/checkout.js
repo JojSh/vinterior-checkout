@@ -19,10 +19,14 @@ class Checkout {
     return this.basket;
   }
 
+  formatAsGBP(number) {
+    return `£${number}`;
+  }
+
   total() {
     const subTotal = this.basket.reduce((acc, item) => acc + item.price, 0);
     const total = this.rules.length ? applyPromotions(subTotal, this.rules, this.basket) : subTotal;
-    return total;
+    return this.formatAsGBP(total);
   }
 }
 

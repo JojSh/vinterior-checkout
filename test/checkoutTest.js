@@ -42,14 +42,14 @@ describe('Checkout', () => {
     it('returns the total when a single item is scanned in', () => {
       const co = new Checkout();
       co.scan('001');
-      expect(co.total()).to.equal(9.25);
+      expect(co.total()).to.equal('£9.25');
     });
 
     it('returns the total when a multiple items are scanned in', () => {
       const co = new Checkout();
       co.scan('002');
       co.scan('003');
-      expect(co.total()).to.equal(64.95);
+      expect(co.total()).to.equal('£64.95');
     });
   });
 });
